@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_clock_helper/model.dart';
+import 'package:smart_clock/iconifed_text_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 
 class SmartClock extends StatefulWidget {
@@ -12,6 +14,7 @@ class _SmartClockState extends State<SmartClock> {
   Timer _timer;
   String _time = "";
   DateTime _dateTime;
+  ClockModel _clockModel;
 
   @override
   void initState() {
@@ -19,6 +22,9 @@ class _SmartClockState extends State<SmartClock> {
 
     _timer = Timer.periodic(Duration(milliseconds: 10), _updateTime);
     _dateTime = DateTime.now();
+    _clockModel = ClockModel();
+    _clockModel.addListener(onModelChanged);
+    print("Location: " + _clockModel.location);
   }
 
   @override
@@ -26,9 +32,12 @@ class _SmartClockState extends State<SmartClock> {
     super.dispose();
   }
 
+  void onModelChanged() {
+    print("Model changed!");
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Container(
         decoration: BoxDecoration(
           // Box decoration takes a gradient
@@ -61,29 +70,75 @@ class _SmartClockState extends State<SmartClock> {
               ])
             ]),
             Center(
-                child: SunPathWidget(
-                    progressValue: _getSecondProgress(),
+                child: ArcProgressWidget(
+                    progressValue: _getHourProgress(),
                     left: -100,
                     top: -190,
                     width: 500,
                     height: 500)),
             Center(
-                child: SunPathWidget(
+                child: ArcProgressWidget(
                     progressValue: _getMinuteProgress(),
                     left: -110,
                     top: -200,
                     width: 520,
                     height: 520)),
             Center(
-                child: SunPathWidget(
-                    progressValue: _getHourProgress(),
+                child: ArcProgressWidget(
+                    progressValue: _getSecondProgress(),
                     left: -120,
                     top: -210,
                     width: 540,
-                    height: 540))
+                    height: 540)),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Column(children: [Text(
+                      "“In three words I can sum up everything I've learned about life: it goes on.”",
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                      Align(child:Text(
+                        "Robert Frost",
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ))]))),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconifiedTextWidget(
+                            text: _clockModel.temperatureString,
+                            iconData: Icons.ac_unit,
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 30),
+                            iconColor: Colors.white,
+                            iconSize: 30,
+                          ),
+                          IconifiedTextWidget(
+                            text: _clockModel.location,
+                            iconData: Icons.home,
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 30),
+                            iconColor: Colors.white,
+                            iconSize: 30,
+                          ),
+                          IconifiedTextWidget(
+                            text: capitalize(_clockModel.weatherString),
+                            iconData: Icons.wb_sunny,
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 30),
+                            iconColor: Colors.white,
+                            iconSize: 30,
+                          )
+                        ])))
           ],
         ));
   }
+
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   double _getHourProgress() {
     return _dateTime.hour / 24 * 100;
