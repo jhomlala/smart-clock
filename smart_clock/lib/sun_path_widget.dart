@@ -4,10 +4,20 @@ import 'package:flutter/widgets.dart';
 import 'animated_state.dart';
 
 class SunPathWidget extends StatefulWidget {
-  final int sunrise;
-  final int sunset;
+  final double progressValue;
+  final double left;
+  final double top;
+  final double width;
+  final double height;
 
-  const SunPathWidget({Key key, this.sunrise, this.sunset}) : super(key: key);
+  SunPathWidget(
+      {Key key,
+      this.progressValue,
+      this.left,
+      this.top,
+      this.width,
+      this.height})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SunPathWidgetState();
@@ -15,22 +25,39 @@ class SunPathWidget extends StatefulWidget {
 
 class _SunPathWidgetState extends AnimatedState<SunPathWidget> {
   double _fraction = 0.0;
+  bool _started = false;
+  double previousValue;
 
   @override
   void initState() {
     super.initState();
-    animateTween(duration: 2000);
+  }
+
+  void _startAnimation() {
+    if (!_started && previousValue != widget.progressValue) {
+      _fraction = 0.0;
+      if (previousValue == null || widget.progressValue < previousValue){
+        previousValue = widget.progressValue;
+      }
+      if (widget.progressValue != 0){
+        animateTween(duration: 500);
+        _started = true;
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _startAnimation();
+    print("PAINT: CURRENT: " + widget.progressValue.toString() + " previous: " + previousValue.toString());
     return SizedBox(
         key: Key("sun_path_widget_sized_box"),
         width: 300,
         height: 150,
         child: CustomPaint(
           key: Key("sun_path_widget_custom_paint"),
-          painter: _SunPathPainter(widget.sunrise, widget.sunset, _fraction),
+          painter: _SunPathPainter(widget.progressValue, previousValue,
+              _fraction, widget.left, widget.top, widget.width, widget.height),
         ));
   }
 
@@ -45,25 +72,57 @@ class _SunPathWidgetState extends AnimatedState<SunPathWidget> {
       _fraction = value;
     });
   }
+
+  @override
+  void onAnimationStatusChanged(AnimationStatus status) {
+    print("Animation status: " + status.toString());
+    if (status == AnimationStatus.completed) {
+      print("Completed " + widget.progressValue.toString());
+      previousValue = widget.progressValue;
+      clear();
+      _started = false;
+    }
+  }
 }
 
 class _SunPathPainter extends CustomPainter {
   final double fraction;
-  final double pi = 3.14159;
+  final double pi = 3.14159265359;
   final int dayAsMs = 86400000;
-  final int sunrise;
-  final int sunset;
+  final double progressValue;
+  final double previousValue;
+  final double left;
+  final double top;
+  final double width;
+  final double height;
 
-  _SunPathPainter(this.sunrise, this.sunset, this.fraction);
+  _SunPathPainter(this.progressValue, this.previousValue, this.fraction,
+      this.left, this.top, this.width, this.height);
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint arcPaint = _getArcPaint();
-    Rect rect = Rect.fromLTWH(-100, -190, 500, 500);
-    canvas.drawCircle(Offset(150, 60), 250, arcPaint);
-
+    Rect rect = Rect.fromLTWH(left, top, width, height);
+    //canvas.drawCircle(Offset(150, 60), 250, arcPaint);
+    print("CurrentValue: " + getCurrentValue().toString());
     Paint arcPaint2 = _getArcPaint2();
-    canvas.drawArc(rect, -0.5 * pi, 1.5 * pi, false, arcPaint2);
+    canvas.drawArc(
+        rect, -0.5 * pi, getCurrentValue() * 2 * pi, false, arcPaint2);
+  }
+
+  double getCurrentValue() {
+    double result = 0;
+    print("Progress value: " + progressValue.toString() + " previous value: " + previousValue.toString() + " fraction: " + fraction.toString());
+    //if (previousValue != null){
+      result = previousValue / 100 +
+          (progressValue / 100 - previousValue / 100) * fraction;
+    //}
+    /*if (result < 0){
+      result = 0;
+    }*/
+    //print("Drawing ARC:" + result.toString());
+
+    return result;
   }
 
   @override
@@ -80,6 +139,14 @@ class _SunPathPainter extends CustomPainter {
   }
 
   Paint _getArcPaint2() {
+    Paint paint = Paint();
+    paint..color = Colors.white70;
+    paint..strokeWidth = 7;
+    paint..style = PaintingStyle.stroke;
+    return paint;
+  }
+
+  Paint _getArcPaint3() {
     Paint paint = Paint();
     paint..color = Colors.white;
     paint..strokeWidth = 7;

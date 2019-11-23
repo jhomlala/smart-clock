@@ -6,18 +6,25 @@ import 'package:rxdart/rxdart.dart';
 import 'empty_animation.dart';
 
 abstract class AnimatedState<T extends StatefulWidget> extends State<T>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   AnimationController controller;
   Observable observable;
   StreamSubscription subscription;
 
   Widget build(BuildContext context);
 
+
+  void clear(){
+    print("Clear!");
+    controller.dispose();
+    subscription.cancel();
+  }
+
   animateTween(
       {double start = 0.0,
-        double end = 1.0,
-        int duration: 1000,
-        Curve curve = Curves.easeInOut}) {
+      double end = 1.0,
+      int duration: 1000,
+      Curve curve = Curves.linear}) {
     controller = _getAnimationController(this, duration);
     Animation animation = _getCurvedAnimation(controller, curve);
     var streamController = StreamController<double>();
@@ -36,12 +43,15 @@ abstract class AnimatedState<T extends StatefulWidget> extends State<T>
     subscription =
         observable.listen((value) => onAnimatedValue(value as double));
     controller.forward();
+    controller.addStatusListener(onAnimationStatusChanged);
   }
+
+  void onAnimationStatusChanged(AnimationStatus status);
 
   Animation<double> setupAnimation(
       {Curve curve = Curves.easeInOut,
-        int duration = 2000,
-        bool noAnimation = false}) {
+      int duration = 2000,
+      bool noAnimation = false}) {
     if (controller == null) {
       controller = _getAnimationController(this, duration);
     }
@@ -54,7 +64,7 @@ abstract class AnimatedState<T extends StatefulWidget> extends State<T>
   }
 
   AnimationController _getAnimationController(
-      SingleTickerProviderStateMixin object, int duration) {
+      TickerProviderStateMixin object, int duration) {
     return AnimationController(
         duration: Duration(milliseconds: duration), vsync: object);
   }

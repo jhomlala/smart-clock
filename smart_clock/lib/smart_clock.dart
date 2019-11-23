@@ -28,6 +28,7 @@ class _SmartClockState extends State<SmartClock> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
         decoration: BoxDecoration(
           // Box decoration takes a gradient
@@ -44,24 +45,56 @@ class _SmartClockState extends State<SmartClock> {
             ],
           ),
         ),
-        child: Stack(children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Stack(
+          children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Center(
+                  child: Text(
+                _time,
+                style: TextStyle(fontSize: 120, color: Colors.white),
+              )),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(
+                  _formatDate(),
+                  style: TextStyle(fontSize: 60, color: Colors.white),
+                )
+              ])
+            ]),
             Center(
-                child: Text(
-              _time,
-              style: TextStyle(fontSize: 120, color: Colors.white),
-            )),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                _formatDate(),
-                style: TextStyle(fontSize: 60, color: Colors.white),
-              )
-            ])
-          ]),
-          Center(child: SunPathWidget())
-        ],
+                child: SunPathWidget(
+                    progressValue: _getSecondProgress(),
+                    left: -100,
+                    top: -190,
+                    width: 500,
+                    height: 500)),
+            Center(
+                child: SunPathWidget(
+                    progressValue: _getMinuteProgress(),
+                    left: -110,
+                    top: -200,
+                    width: 520,
+                    height: 520)),
+            Center(
+                child: SunPathWidget(
+                    progressValue: _getHourProgress(),
+                    left: -120,
+                    top: -210,
+                    width: 540,
+                    height: 540))
+          ],
+        ));
+  }
 
-          ));
+  double _getHourProgress() {
+    return _dateTime.hour / 24 * 100;
+  }
+
+  double _getMinuteProgress() {
+    return _dateTime.minute / 60 * 100;
+  }
+
+  double _getSecondProgress() {
+    return _dateTime.second / 60 * 100;
   }
 
   void _updateTime(Timer timer) {
