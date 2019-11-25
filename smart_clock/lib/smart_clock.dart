@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
+import 'package:smart_clock/city_digital_clock.dart';
 import 'package:smart_clock/iconifed_text_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 
@@ -41,18 +42,7 @@ class _SmartClockState extends State<SmartClock> {
     return Container(
         decoration: BoxDecoration(
           // Box decoration takes a gradient
-          gradient: LinearGradient(
-            // Where the linear gradient begins and ends
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            // Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0.1, 0.6],
-            colors: [
-              // Colors are easy thanks to Flutter's Colors class.
-              Color.fromARGB(255, 20, 136, 204),
-              Color.fromARGB(255, 43, 50, 178)
-            ],
-          ),
+          gradient:_getGradient()
         ),
         child: Stack(
           children: [
@@ -94,14 +84,30 @@ class _SmartClockState extends State<SmartClock> {
                 alignment: Alignment.topCenter,
                 child: Padding(
                     padding: EdgeInsets.only(top: 20),
-                    child: Column(children: [Text(
-                      "“In three words I can sum up everything I've learned about life: it goes on.”",
-                      style: TextStyle(color: Colors.white, fontSize: 25),
-                    ),
-                      Align(child:Text(
-                        "Robert Frost",
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                      ))]))),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CityDigitalClock(
+                            city: "New York",
+                            timeOffset: -5,
+                          ),
+                          CityDigitalClock(
+                            city: "Berlin",
+                            timeOffset: 1,
+                          ),
+                          CityDigitalClock(
+                            city: "Warsaw",
+                            timeOffset: 1,
+                          ),
+                          CityDigitalClock(
+                            city: "Moscow",
+                            timeOffset: 3,
+                          ),
+                          CityDigitalClock(
+                            city: "Tokyo",
+                            timeOffset: 9,
+                          )
+                        ]))),
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -121,7 +127,7 @@ class _SmartClockState extends State<SmartClock> {
                             text: _clockModel.location,
                             iconData: Icons.home,
                             textStyle:
-                                TextStyle(color: Colors.white, fontSize: 30),
+                                TextStyle(color: Colors.white, fontSize: 40),
                             iconColor: Colors.white,
                             iconSize: 30,
                           ),
@@ -183,5 +189,43 @@ class _SmartClockState extends State<SmartClock> {
 
   String _formatDate() {
     return "${_dateTime.year}/${_dateTime.month}/${_dateTime.day}";
+  }
+
+  LinearGradient _getGradient() {
+    return LinearGradient(
+      // Where the linear gradient begins and ends
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
+      // Add one stop for each color. Stops should increase from 0 to 1
+      stops: [0.1, 0.9],
+      colors: _getGradientColors(),
+    );
+  }
+
+  List<Color> _getGradientColors() {
+    List<Color> colors = List();
+    int hour = _dateTime.hour;
+    //night
+    if (hour >= 22 || hour <= 5) {
+      colors.add(Color.fromARGB(255, 35,37,38));
+      colors.add(Color.fromARGB(255, 65,67,69));
+    }
+    //sunrise
+    if (hour >= 6 && hour <= 9) {
+      colors.add(Color.fromARGB(255, 253, 29, 29));
+      colors.add(Color.fromARGB(255, 252, 176, 69));
+    }
+    //day
+    if (hour >= 10 && hour <= 18) {
+      colors.add(Color.fromARGB(255, 58,123,213));
+      colors.add(Color.fromARGB(255, 58,96,115));
+    }
+    //sunset
+    if (hour >= 19 && hour <= 21) {
+      colors.add(Color.fromARGB(255, 11,72,107));
+      colors.add(Color.fromARGB(255, 245,98,23));
+    }
+    print("colors: " + colors.length.toString());
+    return colors;
   }
 }
