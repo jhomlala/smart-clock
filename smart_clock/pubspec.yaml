@@ -22,6 +22,7 @@ dependencies:
   rxdart: ^0.22.6
   flutter_clock_helper:
     path: ../flutter_clock_helper
+  material_design_icons_flutter: 3.4.4595
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

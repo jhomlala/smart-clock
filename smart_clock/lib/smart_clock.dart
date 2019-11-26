@@ -5,8 +5,12 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:smart_clock/city_digital_clock.dart';
 import 'package:smart_clock/iconifed_text_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 class SmartClock extends StatefulWidget {
+  final ClockModel clockModel;
+
+  const SmartClock({Key key, this.clockModel}) : super(key: key);
+
   @override
   _SmartClockState createState() => _SmartClockState();
 }
@@ -15,7 +19,8 @@ class _SmartClockState extends State<SmartClock> {
   Timer _timer;
   String _time = "";
   DateTime _dateTime;
-  ClockModel _clockModel;
+
+  ClockModel get _clockModel => widget.clockModel;
 
   @override
   void initState() {
@@ -23,14 +28,14 @@ class _SmartClockState extends State<SmartClock> {
 
     _timer = Timer.periodic(Duration(milliseconds: 10), _updateTime);
     _dateTime = DateTime.now();
-    _clockModel = ClockModel();
     _clockModel.addListener(onModelChanged);
-    print("Location: " + _clockModel.location);
+
   }
 
   @override
   void dispose() {
     super.dispose();
+    _timer.cancel();
   }
 
   void onModelChanged() {
@@ -41,9 +46,8 @@ class _SmartClockState extends State<SmartClock> {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          // Box decoration takes a gradient
-          gradient:_getGradient()
-        ),
+            // Box decoration takes a gradient
+            gradient: _getGradient()),
         child: Stack(
           children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -115,9 +119,10 @@ class _SmartClockState extends State<SmartClock> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+
                           IconifiedTextWidget(
                             text: _clockModel.temperatureString,
-                            iconData: Icons.ac_unit,
+                            iconData: MdiIcons.thermometer,
                             textStyle:
                                 TextStyle(color: Colors.white, fontSize: 30),
                             iconColor: Colors.white,
@@ -129,7 +134,7 @@ class _SmartClockState extends State<SmartClock> {
                             textStyle:
                                 TextStyle(color: Colors.white, fontSize: 40),
                             iconColor: Colors.white,
-                            iconSize: 30,
+                            iconSize: 40,
                           ),
                           IconifiedTextWidget(
                             text: capitalize(_clockModel.weatherString),
@@ -139,7 +144,8 @@ class _SmartClockState extends State<SmartClock> {
                             iconColor: Colors.white,
                             iconSize: 30,
                           )
-                        ])))
+                        ]))),
+
           ],
         ));
   }
@@ -207,8 +213,8 @@ class _SmartClockState extends State<SmartClock> {
     int hour = _dateTime.hour;
     //night
     if (hour >= 22 || hour <= 5) {
-      colors.add(Color.fromARGB(255, 35,37,38));
-      colors.add(Color.fromARGB(255, 65,67,69));
+      colors.add(Color.fromARGB(255, 35, 37, 38));
+      colors.add(Color.fromARGB(255, 65, 67, 69));
     }
     //sunrise
     if (hour >= 6 && hour <= 9) {
@@ -217,15 +223,14 @@ class _SmartClockState extends State<SmartClock> {
     }
     //day
     if (hour >= 10 && hour <= 18) {
-      colors.add(Color.fromARGB(255, 58,123,213));
-      colors.add(Color.fromARGB(255, 58,96,115));
+      colors.add(Color.fromARGB(255, 58, 123, 213));
+      colors.add(Color.fromARGB(255, 58, 96, 115));
     }
     //sunset
     if (hour >= 19 && hour <= 21) {
-      colors.add(Color.fromARGB(255, 11,72,107));
-      colors.add(Color.fromARGB(255, 245,98,23));
+      colors.add(Color.fromARGB(255, 11, 72, 107));
+      colors.add(Color.fromARGB(255, 245, 98, 23));
     }
-    print("colors: " + colors.length.toString());
     return colors;
   }
 }

@@ -15,7 +15,6 @@ abstract class AnimatedState<T extends StatefulWidget> extends State<T>
 
 
   void clear(){
-    print("Clear!");
     controller.dispose();
     subscription.cancel();
   }

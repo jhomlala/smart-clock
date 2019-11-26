@@ -157,8 +157,10 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
   Widget _configButton() {
     return Builder(
       builder: (BuildContext context) {
-        return IconButton(
-          icon: Icon(Icons.settings),
+        return Padding(
+            padding: EdgeInsets.only(right:25,top:25),
+            child:IconButton(
+          icon: Icon(Icons.settings, color: Colors.white, size: 50,),
           tooltip: 'Configure clock',
           onPressed: () {
             Scaffold.of(context).openEndDrawer();
@@ -166,7 +168,7 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
               _configButtonShown = false;
             });
           },
-        );
+        ));
       },
     );
   }
@@ -206,7 +208,7 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
             },
             child: Stack(
               children: [
-                clock,
+                widget._clock(_model),
                 if (_configButtonShown)
                   Positioned(
                     top: 0,

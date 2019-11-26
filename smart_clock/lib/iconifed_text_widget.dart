@@ -24,11 +24,16 @@ class IconifiedTextWidget extends StatelessWidget {
         color: iconColor,
         size: iconSize,
       ),
-      Padding(padding: EdgeInsets.only(left:10),),
-      Text(
-        text,
-        style: textStyle,
-      )
+      Padding(
+        padding: EdgeInsets.only(left: 10),
+      ),
+      Container(
+          width: 200,
+          child: Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            style: textStyle,
+          ))
     ]);
   }
 }
