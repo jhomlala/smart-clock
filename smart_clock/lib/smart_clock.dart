@@ -44,6 +44,9 @@ class _SmartClockState extends State<SmartClock> {
 
   @override
   Widget build(BuildContext context) {
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
         decoration: BoxDecoration(
             // Box decoration takes a gradient
@@ -127,6 +130,7 @@ class _SmartClockState extends State<SmartClock> {
                                 TextStyle(color: Colors.white, fontSize: 30),
                             iconColor: Colors.white,
                             iconSize: 30,
+                            width: screenWidth * 0.3,
                           ),
                           IconifiedTextWidget(
                             text: _clockModel.location,
@@ -135,6 +139,7 @@ class _SmartClockState extends State<SmartClock> {
                                 TextStyle(color: Colors.white, fontSize: 40),
                             iconColor: Colors.white,
                             iconSize: 40,
+                            width: screenWidth * 0.4,
                           ),
                           IconifiedTextWidget(
                             text: capitalize(_clockModel.weatherString),
@@ -143,6 +148,7 @@ class _SmartClockState extends State<SmartClock> {
                                 TextStyle(color: Colors.white, fontSize: 30),
                             iconColor: Colors.white,
                             iconSize: 30,
+                            width: screenWidth * 0.3,
                           )
                         ]))),
 

@@ -209,7 +209,6 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
             child: Stack(
               children: [
                 widget._clock(_model),
-                if (_configButtonShown)
                   Positioned(
                     top: 0,
                     right: 0,
