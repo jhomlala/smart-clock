@@ -9,6 +9,7 @@ class ArcProgressWidget extends StatefulWidget {
   final double top;
   final double width;
   final double height;
+  final Brightness brightness;
 
   ArcProgressWidget(
       {Key key,
@@ -16,7 +17,7 @@ class ArcProgressWidget extends StatefulWidget {
       this.left,
       this.top,
       this.width,
-      this.height})
+      this.height, this.brightness})
       : super(key: key);
 
   @override
@@ -56,7 +57,7 @@ class _ArcProgressWidgetState extends AnimatedState<ArcProgressWidget> {
         child: CustomPaint(
           key: Key("sun_path_widget_custom_paint"),
           painter: _ArcProgressPainter(widget.progressValue, previousValue,
-              _fraction, widget.left, widget.top, widget.width, widget.height),
+              _fraction, widget.left, widget.top, widget.width, widget.height, widget.brightness),
         ));
   }
 
@@ -92,9 +93,10 @@ class _ArcProgressPainter extends CustomPainter {
   final double top;
   final double width;
   final double height;
+  final Brightness brightness;
 
   _ArcProgressPainter(this.progressValue, this.previousValue, this.fraction,
-      this.left, this.top, this.width, this.height);
+      this.left, this.top, this.width, this.height, this.brightness);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -116,8 +118,13 @@ class _ArcProgressPainter extends CustomPainter {
 
 
   Paint _getArcPaint2() {
+    print("Brightness: " + brightness.toString());
     Paint paint = Paint();
-    paint..color = Colors.white70;
+    if (brightness == Brightness.light) {
+      paint..color = Colors.black87;
+    } else {
+      paint..color = Colors.white70;
+    }
     paint..strokeWidth = 7;
     paint..style = PaintingStyle.stroke;
     return paint;

@@ -40,14 +40,15 @@ class _SmartClockState extends State<SmartClock> {
 
   void onModelChanged() {
     print("Model changed!");
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
+        return Container(
 
-    return Container(
         decoration: BoxDecoration(
             // Box decoration takes a gradient
             gradient: _getGradient()),
@@ -57,12 +58,12 @@ class _SmartClockState extends State<SmartClock> {
               Center(
                   child: Text(
                 _time,
-                style: TextStyle(fontSize: 120, color: Colors.white),
+                style: TextStyle(fontSize: 120, color: Theme.of(context).textTheme.body1.color),
               )),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(
                   _formatDate(),
-                  style: TextStyle(fontSize: 60, color: Colors.white),
+                  style: TextStyle(fontSize: 60, color: Theme.of(context).textTheme.body1.color),
                 )
               ])
             ]),
@@ -72,21 +73,22 @@ class _SmartClockState extends State<SmartClock> {
                     left: -100,
                     top: -190,
                     width: 500,
-                    height: 500)),
+                    height: 500,
+                brightness: Theme.of(context).brightness,)),
             Center(
                 child: ArcProgressWidget(
                     progressValue: _getMinuteProgress(),
                     left: -110,
                     top: -200,
                     width: 520,
-                    height: 520)),
+                    height: 520,brightness: Theme.of(context).brightness,)),
             Center(
                 child: ArcProgressWidget(
                     progressValue: _getSecondProgress(),
                     left: -120,
                     top: -210,
                     width: 540,
-                    height: 540)),
+                    height: 540,brightness: Theme.of(context).brightness,)),
             Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
@@ -127,8 +129,8 @@ class _SmartClockState extends State<SmartClock> {
                             text: _clockModel.temperatureString,
                             iconData: MdiIcons.thermometer,
                             textStyle:
-                                TextStyle(color: Colors.white, fontSize: 30),
-                            iconColor: Colors.white,
+                                TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 30),
+                            iconColor: Theme.of(context).textTheme.body1.color,
                             iconSize: 30,
                             width: screenWidth * 0.3,
                           ),
@@ -136,17 +138,17 @@ class _SmartClockState extends State<SmartClock> {
                             text: _clockModel.location,
                             iconData: Icons.home,
                             textStyle:
-                                TextStyle(color: Colors.white, fontSize: 40),
-                            iconColor: Colors.white,
+                                TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 40),
+                            iconColor: Theme.of(context).textTheme.body1.color,
                             iconSize: 40,
                             width: screenWidth * 0.4,
                           ),
                           IconifiedTextWidget(
                             text: capitalize(_clockModel.weatherString),
-                            iconData: Icons.wb_sunny,
+                            iconData: _getWeatherIcon(_clockModel.weatherCondition),
                             textStyle:
-                                TextStyle(color: Colors.white, fontSize: 30),
-                            iconColor: Colors.white,
+                                TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 30),
+                            iconColor: Theme.of(context).textTheme.body1.color,
                             iconSize: 30,
                             width: screenWidth * 0.3,
                           )
@@ -185,6 +187,7 @@ class _SmartClockState extends State<SmartClock> {
   }
 
   String _formatTimeUnit(int value, int places) {
+    
     if (places == 2 && value < 10) {
       return "0$value";
     }
@@ -239,4 +242,27 @@ class _SmartClockState extends State<SmartClock> {
     }
     return colors;
   }
+  
+  IconData _getWeatherIcon(WeatherCondition weatherCondition){
+    switch(weatherCondition){
+
+      case WeatherCondition.cloudy:
+        return MdiIcons.weatherCloudy;
+      case WeatherCondition.foggy:
+        return MdiIcons.weatherFog;
+      case WeatherCondition.rainy:
+        return MdiIcons.weatherRainy;
+      case WeatherCondition.snowy:
+        return MdiIcons.weatherSnowy;
+      case WeatherCondition.sunny:
+        return MdiIcons.weatherSunny;
+      case WeatherCondition.thunderstorm:
+        return MdiIcons.weatherLightning;
+      case WeatherCondition.windy:
+        return MdiIcons.weatherWindy;
+    }
+
+    return MdiIcons.weatherWindy;
+  }
+  
 }

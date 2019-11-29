@@ -12,10 +12,10 @@ class CityDigitalClock extends StatelessWidget {
     return Column(children: [
       Text(
         city,
-        style: TextStyle(fontSize: 20, color: Colors.white),
+        style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.body1.color),
       ),
-      Text(_updateTime(cityDateTime), style: TextStyle(fontSize: 24, color: Colors.white)),
-      Text(_formatDate(cityDateTime), style: TextStyle(fontSize: 16, color: Colors.white))
+      Text(_updateTime(cityDateTime), style: TextStyle(fontSize: 24, color: Theme.of(context).textTheme.body1.color)),
+      Text(_formatDate(cityDateTime), style: TextStyle(fontSize: 16,color: Theme.of(context).textTheme.body1.color))
     ]);
   }
 
