@@ -42,24 +42,28 @@ class _SmartClockState extends State<SmartClock> {
     print("Model changed!");
   }
 
-  double _getTimeFontSize(double hourRingSize){
-    return hourRingSize/5;
+  double _getTimeFontSize(double hourRingSize) {
+    if (_clockModel.is24HourFormat) {
+      return hourRingSize / 5;
+    } else {
+      return hourRingSize / 6;
+    }
   }
 
-  double _getDateFontSize(double hourRingSize){
-    return hourRingSize/10;
-  }
-  
-  double _getCityClockMaxTextSize(double hourRingSize){
-    return hourRingSize/14;
+  double _getDateFontSize(double hourRingSize) {
+    return hourRingSize / 10;
   }
 
-  double _getBottomSmallWidgetTextSize(double hourRingSize){
-    return hourRingSize/14;
+  double _getCityClockMaxTextSize(double hourRingSize) {
+    return hourRingSize / 14;
   }
 
-  double _getBottomBigWidgetTextSize(double hourRingSize){
-    return hourRingSize/10;
+  double _getBottomSmallWidgetTextSize(double hourRingSize) {
+    return hourRingSize / 14;
+  }
+
+  double _getBottomBigWidgetTextSize(double hourRingSize) {
+    return hourRingSize / 10;
   }
 
   @override
@@ -86,13 +90,7 @@ class _SmartClockState extends State<SmartClock> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(
-                          child: Text(
-                        _time,
-                        style: TextStyle(
-                            fontSize: _getTimeFontSize(hourRingSize),
-                            color: Theme.of(context).textTheme.body1.color),
-                      )),
+                      _getTimeWidget(hourRingSize),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -105,30 +103,33 @@ class _SmartClockState extends State<SmartClock> {
                             )
                           ])
                     ])),
-            Center(child:Container(
-                width: hourRingSize,
-                height: hourRingSize,
-                child: ArcProgressWidget(
-              progressValue: _getHourProgress(),
-              width: hourRingSize/2,
-              brightness: Theme.of(context).brightness,
-            ))),
-            Center(child:Container(
-                width: minuteRingSize,
-                height: minuteRingSize,
-                child: ArcProgressWidget(
-                  progressValue: _getMinuteProgress(),
-                  width: minuteRingSize/2,
-                  brightness: Theme.of(context).brightness,
-                ))),
-            Center(child:Container(
-                width: secondRingSize,
-                height: secondRingSize,
-                child: ArcProgressWidget(
-                  progressValue: _getSecondProgress(),
-                  width: secondRingSize/2,
-                  brightness: Theme.of(context).brightness,
-                ))),
+            Center(
+                child: Container(
+                    width: hourRingSize,
+                    height: hourRingSize,
+                    child: ArcProgressWidget(
+                      progressValue: _getHourProgress(),
+                      width: hourRingSize / 2,
+                      brightness: Theme.of(context).brightness,
+                    ))),
+            Center(
+                child: Container(
+                    width: minuteRingSize,
+                    height: minuteRingSize,
+                    child: ArcProgressWidget(
+                      progressValue: _getMinuteProgress(),
+                      width: minuteRingSize / 2,
+                      brightness: Theme.of(context).brightness,
+                    ))),
+            Center(
+                child: Container(
+                    width: secondRingSize,
+                    height: secondRingSize,
+                    child: ArcProgressWidget(
+                      progressValue: _getSecondProgress(),
+                      width: secondRingSize / 2,
+                      brightness: Theme.of(context).brightness,
+                    ))),
             Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
@@ -174,9 +175,11 @@ class _SmartClockState extends State<SmartClock> {
                             iconData: MdiIcons.thermometer,
                             textStyle: TextStyle(
                                 color: Theme.of(context).textTheme.body1.color,
-                                fontSize: _getBottomSmallWidgetTextSize(hourRingSize)),
+                                fontSize: _getBottomSmallWidgetTextSize(
+                                    hourRingSize)),
                             iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize: _getBottomSmallWidgetTextSize(hourRingSize),
+                            iconSize:
+                                _getBottomSmallWidgetTextSize(hourRingSize),
                             width: screenWidth * 0.3,
                           ),
                           IconifiedTextWidget(
@@ -184,7 +187,8 @@ class _SmartClockState extends State<SmartClock> {
                             iconData: Icons.home,
                             textStyle: TextStyle(
                                 color: Theme.of(context).textTheme.body1.color,
-                                fontSize: _getBottomBigWidgetTextSize(hourRingSize)),
+                                fontSize:
+                                    _getBottomBigWidgetTextSize(hourRingSize)),
                             iconColor: Theme.of(context).textTheme.body1.color,
                             iconSize: _getBottomBigWidgetTextSize(hourRingSize),
                             width: screenWidth * 0.4,
@@ -195,14 +199,39 @@ class _SmartClockState extends State<SmartClock> {
                                 _getWeatherIcon(_clockModel.weatherCondition),
                             textStyle: TextStyle(
                                 color: Theme.of(context).textTheme.body1.color,
-                                fontSize: _getBottomSmallWidgetTextSize(hourRingSize)),
+                                fontSize: _getBottomSmallWidgetTextSize(
+                                    hourRingSize)),
                             iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize: _getBottomSmallWidgetTextSize(hourRingSize),
+                            iconSize:
+                                _getBottomSmallWidgetTextSize(hourRingSize),
                             width: screenWidth * 0.3,
                           )
                         ]))),
           ],
         ));
+  }
+
+  Widget _getTimeWidget(double hourRingSize) {
+    var is24hourFormat = _clockModel.is24HourFormat;
+    var hour = _dateTime.hour;
+    var hourSufix = "AM";
+    if (!is24hourFormat) {
+      hourSufix = "PM";
+    }
+    List<Widget> widgets = List();
+    widgets.add(Text(_time,
+        style: TextStyle(
+            fontSize: _getTimeFontSize(hourRingSize),
+            color: Theme.of(context).textTheme.body1.color)));
+    if (!is24hourFormat) {
+      widgets.add(Text(hourSufix,
+          style: TextStyle(
+              fontSize: _getTimeFontSize(hourRingSize) / 2,
+              color: Theme.of(context).textTheme.body1.color)));
+    }
+    return Center(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, children: widgets));
   }
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
@@ -220,16 +249,23 @@ class _SmartClockState extends State<SmartClock> {
   }
 
   void _updateTime(Timer timer) {
+    var is24hourFormat = _clockModel.is24HourFormat;
+    var hour = _dateTime.hour;
+    var hourSufix = "AM";
+    if (!is24hourFormat) {
+      if (hour > 12) {
+        hour = hour - 12;
+      }
+      hourSufix = "PM";
+    }
     setState(() {
       //_time = DateTime.now().toIso8601String();
       _dateTime = DateTime.now();
-      _time = _formatTimeUnit(_dateTime.hour, 2) +
+      _time = _formatTimeUnit(hour, 2) +
           ":" +
           _formatTimeUnit(_dateTime.minute, 2) +
           ":" +
-          _formatTimeUnit(_dateTime.second, 2); //+
-      /*"." +
-          _formatTimeUnit(dateTime.millisecond, 3);*/
+          _formatTimeUnit(_dateTime.second, 2);
     });
   }
 
@@ -259,33 +295,40 @@ class _SmartClockState extends State<SmartClock> {
       end: Alignment.topCenter,
       // Add one stop for each color. Stops should increase from 0 to 1
       stops: [0.1, 0.9],
-      colors: _getGradientColors(),
+      colors: _getGradientColors(context),
     );
   }
 
-  List<Color> _getGradientColors() {
+  List<Color> _getGradientColors(BuildContext context) {
     List<Color> colors = List();
     int hour = _dateTime.hour;
-    //night
-    if (hour >= 22 || hour <= 5) {
-      colors.add(Color.fromARGB(255, 35, 37, 38));
-      colors.add(Color.fromARGB(255, 65, 67, 69));
+    
+      //night
+      if (hour >= 22 || hour <= 5) {
+        colors.add(Color.fromARGB(255, 55, 59, 68));
+        colors.add(Color.fromARGB(255, 66, 134, 244));
+      }
+      //sunrise
+      if (hour >= 6 && hour <= 9) {
+        colors.add(Color.fromARGB(255, 253, 29, 29));
+        colors.add(Color.fromARGB(255, 252, 176, 69));
+      }
+      //day
+      if (hour >= 10 && hour <= 18) {
+        colors.add(Color.fromARGB(255, 58, 123, 213));
+        colors.add(Color.fromARGB(255, 58, 96, 115));
+      }
+      //sunset
+      if (hour >= 19 && hour <= 21) {
+        colors.add(Color.fromARGB(255, 11, 72, 107));
+        colors.add(Color.fromARGB(255, 245, 98, 23));
+
     }
-    //sunrise
-    if (hour >= 6 && hour <= 9) {
-      colors.add(Color.fromARGB(255, 253, 29, 29));
-      colors.add(Color.fromARGB(255, 252, 176, 69));
-    }
-    //day
-    if (hour >= 10 && hour <= 18) {
-      colors.add(Color.fromARGB(255, 58, 123, 213));
-      colors.add(Color.fromARGB(255, 58, 96, 115));
-    }
-    //sunset
-    if (hour >= 19 && hour <= 21) {
-      colors.add(Color.fromARGB(255, 11, 72, 107));
-      colors.add(Color.fromARGB(255, 245, 98, 23));
-    }
+
+
+
+
+
     return colors;
   }
 
