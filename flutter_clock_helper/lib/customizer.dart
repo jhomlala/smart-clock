@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 
 import 'model.dart';
-
+import 'package:flutter/services.dart';
 /// Returns a clock [Widget] with [ClockModel].
 ///
 /// Example:
@@ -46,6 +46,10 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
   void initState() {
     super.initState();
     _model.addListener(_handleModelChange);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
 
   @override
@@ -154,13 +158,16 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
     );
   }
 
-  Widget _configButton() {
+  Widget _configButton(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
+        double width = MediaQuery.of(context).size.width;
+        double iconSize = width * 0.05;
+        print("Width: " + width.toString());
         return Padding(
-            padding: EdgeInsets.only(right:25,top:25),
+            padding: EdgeInsets.only(right:iconSize/2,top:iconSize/2),
             child:IconButton(
-          icon: Icon(Icons.settings, color: Colors.white, size: 50,),
+          icon: Icon(Icons.settings, size: width * 0.05,),
           tooltip: 'Configure clock',
           onPressed: () {
             Scaffold.of(context).openEndDrawer();
@@ -175,6 +182,8 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
 
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setEnabledSystemUIOverlays([]);
     final clock = Center(
       child: AspectRatio(
         aspectRatio: 5 / 3,
@@ -214,7 +223,7 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
                     right: 0,
                     child: Opacity(
                       opacity: 0.7,
-                      child: _configButton(),
+                      child: _configButton(context),
                     ),
                   ),
               ],

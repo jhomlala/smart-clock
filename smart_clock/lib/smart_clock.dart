@@ -6,6 +6,7 @@ import 'package:smart_clock/city_digital_clock.dart';
 import 'package:smart_clock/iconifed_text_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 class SmartClock extends StatefulWidget {
   final ClockModel clockModel;
 
@@ -29,7 +30,6 @@ class _SmartClockState extends State<SmartClock> {
     _timer = Timer.periodic(Duration(milliseconds: 10), _updateTime);
     _dateTime = DateTime.now();
     _clockModel.addListener(onModelChanged);
-
   }
 
   @override
@@ -40,55 +40,95 @@ class _SmartClockState extends State<SmartClock> {
 
   void onModelChanged() {
     print("Model changed!");
+  }
 
+  double _getTimeFontSize(double hourRingSize){
+    return hourRingSize/5;
+  }
+
+  double _getDateFontSize(double hourRingSize){
+    return hourRingSize/10;
+  }
+  
+  double _getCityClockMaxTextSize(double hourRingSize){
+    return hourRingSize/14;
+  }
+
+  double _getBottomSmallWidgetTextSize(double hourRingSize){
+    return hourRingSize/14;
+  }
+
+  double _getBottomBigWidgetTextSize(double hourRingSize){
+    return hourRingSize/10;
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double screenWidth = width;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-        return Container(
+    double hourRingSize = height * 0.5;
+    double minuteRingSize = hourRingSize + 15;
+    double secondRingSize = minuteRingSize + 15;
+    //print("ring size: " + ringSize.toString());
 
+    //print("W: " + width.toString() + " height:  " + height.toString());
+
+    return Container(
         decoration: BoxDecoration(
             // Box decoration takes a gradient
             gradient: _getGradient()),
         child: Stack(
           children: [
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Center(
-                  child: Text(
-                _time,
-                style: TextStyle(fontSize: 120, color: Theme.of(context).textTheme.body1.color),
-              )),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(
-                  _formatDate(),
-                  style: TextStyle(fontSize: 60, color: Theme.of(context).textTheme.body1.color),
-                )
-              ])
-            ]),
-            Center(
+            Padding(
+                padding: EdgeInsets.only(top: 0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                          child: Text(
+                        _time,
+                        style: TextStyle(
+                            fontSize: _getTimeFontSize(hourRingSize),
+                            color: Theme.of(context).textTheme.body1.color),
+                      )),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              _formatDate(),
+                              style: TextStyle(
+                                  fontSize: _getDateFontSize(hourRingSize),
+                                  color:
+                                      Theme.of(context).textTheme.body1.color),
+                            )
+                          ])
+                    ])),
+            Center(child:Container(
+                width: hourRingSize,
+                height: hourRingSize,
                 child: ArcProgressWidget(
-                    progressValue: _getHourProgress(),
-                    left: -100,
-                    top: -190,
-                    width: 500,
-                    height: 500,
-                brightness: Theme.of(context).brightness,)),
-            Center(
+              progressValue: _getHourProgress(),
+              width: hourRingSize/2,
+              brightness: Theme.of(context).brightness,
+            ))),
+            Center(child:Container(
+                width: minuteRingSize,
+                height: minuteRingSize,
                 child: ArcProgressWidget(
-                    progressValue: _getMinuteProgress(),
-                    left: -110,
-                    top: -200,
-                    width: 520,
-                    height: 520,brightness: Theme.of(context).brightness,)),
-            Center(
+                  progressValue: _getMinuteProgress(),
+                  width: minuteRingSize/2,
+                  brightness: Theme.of(context).brightness,
+                ))),
+            Center(child:Container(
+                width: secondRingSize,
+                height: secondRingSize,
                 child: ArcProgressWidget(
-                    progressValue: _getSecondProgress(),
-                    left: -120,
-                    top: -210,
-                    width: 540,
-                    height: 540,brightness: Theme.of(context).brightness,)),
+                  progressValue: _getSecondProgress(),
+                  width: secondRingSize/2,
+                  brightness: Theme.of(context).brightness,
+                ))),
             Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
@@ -99,22 +139,27 @@ class _SmartClockState extends State<SmartClock> {
                           CityDigitalClock(
                             city: "New York",
                             timeOffset: -5,
+                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
                           CityDigitalClock(
                             city: "Berlin",
                             timeOffset: 1,
+                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
                           CityDigitalClock(
                             city: "Warsaw",
                             timeOffset: 1,
+                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
                           CityDigitalClock(
                             city: "Moscow",
                             timeOffset: 3,
+                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
                           CityDigitalClock(
                             city: "Tokyo",
                             timeOffset: 9,
+                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
                           )
                         ]))),
             Align(
@@ -124,36 +169,38 @@ class _SmartClockState extends State<SmartClock> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-
                           IconifiedTextWidget(
                             text: _clockModel.temperatureString,
                             iconData: MdiIcons.thermometer,
-                            textStyle:
-                                TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 30),
+                            textStyle: TextStyle(
+                                color: Theme.of(context).textTheme.body1.color,
+                                fontSize: _getBottomSmallWidgetTextSize(hourRingSize)),
                             iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize: 30,
+                            iconSize: _getBottomSmallWidgetTextSize(hourRingSize),
                             width: screenWidth * 0.3,
                           ),
                           IconifiedTextWidget(
                             text: _clockModel.location,
                             iconData: Icons.home,
-                            textStyle:
-                                TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 40),
+                            textStyle: TextStyle(
+                                color: Theme.of(context).textTheme.body1.color,
+                                fontSize: _getBottomBigWidgetTextSize(hourRingSize)),
                             iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize: 40,
+                            iconSize: _getBottomBigWidgetTextSize(hourRingSize),
                             width: screenWidth * 0.4,
                           ),
                           IconifiedTextWidget(
                             text: capitalize(_clockModel.weatherString),
-                            iconData: _getWeatherIcon(_clockModel.weatherCondition),
-                            textStyle:
-                                TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 30),
+                            iconData:
+                                _getWeatherIcon(_clockModel.weatherCondition),
+                            textStyle: TextStyle(
+                                color: Theme.of(context).textTheme.body1.color,
+                                fontSize: _getBottomSmallWidgetTextSize(hourRingSize)),
                             iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize: 30,
+                            iconSize: _getBottomSmallWidgetTextSize(hourRingSize),
                             width: screenWidth * 0.3,
                           )
                         ]))),
-
           ],
         ));
   }
@@ -187,7 +234,6 @@ class _SmartClockState extends State<SmartClock> {
   }
 
   String _formatTimeUnit(int value, int places) {
-    
     if (places == 2 && value < 10) {
       return "0$value";
     }
@@ -242,10 +288,9 @@ class _SmartClockState extends State<SmartClock> {
     }
     return colors;
   }
-  
-  IconData _getWeatherIcon(WeatherCondition weatherCondition){
-    switch(weatherCondition){
 
+  IconData _getWeatherIcon(WeatherCondition weatherCondition) {
+    switch (weatherCondition) {
       case WeatherCondition.cloudy:
         return MdiIcons.weatherCloudy;
       case WeatherCondition.foggy:
@@ -264,5 +309,4 @@ class _SmartClockState extends State<SmartClock> {
 
     return MdiIcons.weatherWindy;
   }
-  
 }

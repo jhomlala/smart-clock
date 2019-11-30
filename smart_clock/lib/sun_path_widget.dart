@@ -50,10 +50,11 @@ class _ArcProgressWidgetState extends AnimatedState<ArcProgressWidget> {
   @override
   Widget build(BuildContext context) {
     _startAnimation();
-    return SizedBox(
+    //print("width: " + context.size.width.toString());
+    //print("Width: "+ MediaQuery.of(context).size.width.toString());
+    return Container(
+
         key: Key("sun_path_widget_sized_box"),
-        width: 300,
-        height: 150,
         child: CustomPaint(
           key: Key("sun_path_widget_custom_paint"),
           painter: _ArcProgressPainter(widget.progressValue, previousValue,
@@ -94,13 +95,19 @@ class _ArcProgressPainter extends CustomPainter {
   final double width;
   final double height;
   final Brightness brightness;
+  final double paintSize = 5;
 
   _ArcProgressPainter(this.progressValue, this.previousValue, this.fraction,
       this.left, this.top, this.width, this.height, this.brightness);
 
   @override
   void paint(Canvas canvas, Size size) {
-    Rect rect = Rect.fromLTWH(left, top, width, height);
+    //Offset offset = Offset(left,top);
+    //print("Offset is: " + offset.toString());
+
+    Offset offset = Offset(width,width);
+    Rect rect = Rect.fromCircle(center: offset, radius: width - paintSize/2);
+    //Rect rect = Rect.fromLTWH(left, top, width, height);
     Paint arcPaint2 = _getArcPaint2();
     canvas.drawArc(
         rect, -0.5 * pi, getCurrentValue() * 2 * pi, false, arcPaint2);
@@ -118,14 +125,14 @@ class _ArcProgressPainter extends CustomPainter {
 
 
   Paint _getArcPaint2() {
-    print("Brightness: " + brightness.toString());
+    //print("Brightness: " + brightness.toString());
     Paint paint = Paint();
     if (brightness == Brightness.light) {
       paint..color = Colors.black87;
     } else {
       paint..color = Colors.white70;
     }
-    paint..strokeWidth = 7;
+    paint..strokeWidth = paintSize;
     paint..style = PaintingStyle.stroke;
     return paint;
   }
