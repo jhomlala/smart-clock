@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
-import 'package:smart_clock/city_digital_clock.dart';
+import 'package:smart_clock/location_time_widget.dart';
 import 'package:smart_clock/iconifed_text_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -137,30 +137,30 @@ class _SmartClockState extends State<SmartClock> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CityDigitalClock(
-                            city: "New York",
+                          LocationTimeWidget(
+                            location: "New York",
                             timeOffset: -5,
-                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
+                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
-                          CityDigitalClock(
-                            city: "Berlin",
+                          LocationTimeWidget(
+                            location: "Berlin",
                             timeOffset: 1,
-                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
+                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
-                          CityDigitalClock(
-                            city: "Warsaw",
+                          LocationTimeWidget(
+                            location: "Warsaw",
                             timeOffset: 1,
-                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
+                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
-                          CityDigitalClock(
-                            city: "Moscow",
+                          LocationTimeWidget(
+                            location: "Moscow",
                             timeOffset: 3,
-                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
+                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
                           ),
-                          CityDigitalClock(
-                            city: "Tokyo",
+                          LocationTimeWidget(
+                            location: "Tokyo",
                             timeOffset: 9,
-                            maxTextSize: _getCityClockMaxTextSize(hourRingSize),
+                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
                           )
                         ]))),
             Align(
@@ -302,7 +302,7 @@ class _SmartClockState extends State<SmartClock> {
   List<Color> _getGradientColors(BuildContext context) {
     List<Color> colors = List();
     int hour = _dateTime.hour;
-    
+
       //night
       if (hour >= 22 || hour <= 5) {
         colors.add(Color.fromARGB(255, 55, 59, 68));
