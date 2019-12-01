@@ -6,7 +6,7 @@ import 'package:smart_clock/model/iconified_text_data.dart';
 import 'package:smart_clock/widget/iconifed_text_widget.dart';
 import 'package:smart_clock/widget/iconified_texts_row_widget.dart';
 import 'package:smart_clock/widget/locations_times_row_widget.dart';
-import 'package:smart_clock/sun_path_widget.dart';
+import 'package:smart_clock/widget/arc_progress_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'model/location.dart';
@@ -77,8 +77,8 @@ class _SmartClockState extends State<SmartClock> {
     double screenWidth = width;
 
     double hourRingSize = height * 0.5;
-    double minuteRingSize = hourRingSize + 15;
-    double secondRingSize = minuteRingSize + 15;
+    double minuteRingSize = hourRingSize + 25;
+    double secondRingSize = minuteRingSize + 25;
     //print("ring size: " + ringSize.toString());
 
     //print("W: " + width.toString() + " height:  " + height.toString());
@@ -113,8 +113,10 @@ class _SmartClockState extends State<SmartClock> {
                     height: hourRingSize,
                     child: ArcProgressWidget(
                       progressValue: _getHourProgress(),
-                      width: hourRingSize / 2,
+                      boxWidth: hourRingSize / 2,
                       brightness: Theme.of(context).brightness,
+                      strokeWidth: 10,
+                      animationTime: 500,
                     ))),
             Center(
                 child: Container(
@@ -122,8 +124,10 @@ class _SmartClockState extends State<SmartClock> {
                     height: minuteRingSize,
                     child: ArcProgressWidget(
                       progressValue: _getMinuteProgress(),
-                      width: minuteRingSize / 2,
+                      boxWidth: minuteRingSize / 2,
                       brightness: Theme.of(context).brightness,
+                      strokeWidth: 10,
+                      animationTime: 500,
                     ))),
             Center(
                 child: Container(
@@ -131,8 +135,10 @@ class _SmartClockState extends State<SmartClock> {
                     height: secondRingSize,
                     child: ArcProgressWidget(
                       progressValue: _getSecondProgress(),
-                      width: secondRingSize / 2,
+                      boxWidth: secondRingSize / 2,
                       brightness: Theme.of(context).brightness,
+                      strokeWidth: 10,
+                      animationTime: 500,
                     ))),
             Align(
                 alignment: Alignment.topCenter,
