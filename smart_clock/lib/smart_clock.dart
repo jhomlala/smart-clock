@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
-import 'package:smart_clock/iconifed_text_widget.dart';
+import 'package:smart_clock/model/iconified_text_data.dart';
+import 'package:smart_clock/widget/iconifed_text_widget.dart';
+import 'package:smart_clock/widget/iconified_texts_row_widget.dart';
 import 'package:smart_clock/widget/locations_times_row_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -145,49 +147,27 @@ class _SmartClockState extends State<SmartClock> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconifiedTextWidget(
-                            text: _clockModel.temperatureString,
-                            iconData: MdiIcons.thermometer,
-                            textStyle: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color,
-                                fontSize: _getBottomSmallWidgetTextSize(
-                                    hourRingSize)),
-                            iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize:
-                                _getBottomSmallWidgetTextSize(hourRingSize),
-                            width: screenWidth * 0.3,
-                          ),
-                          IconifiedTextWidget(
-                            text: _clockModel.location,
-                            iconData: Icons.home,
-                            textStyle: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color,
-                                fontSize:
-                                    _getBottomBigWidgetTextSize(hourRingSize)),
-                            iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize: _getBottomBigWidgetTextSize(hourRingSize),
-                            width: screenWidth * 0.4,
-                          ),
-                          IconifiedTextWidget(
-                            text: capitalize(_clockModel.weatherString),
-                            iconData:
-                                _getWeatherIcon(_clockModel.weatherCondition),
-                            textStyle: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color,
-                                fontSize: _getBottomSmallWidgetTextSize(
-                                    hourRingSize)),
-                            iconColor: Theme.of(context).textTheme.body1.color,
-                            iconSize:
-                                _getBottomSmallWidgetTextSize(hourRingSize),
-                            width: screenWidth * 0.3,
-                          )
-                        ]))),
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: IconifiedTextsRowWidget(
+                    iconifiedTextData: _getIconifiedTextData(),
+                    smallFontSize: _getBottomSmallWidgetTextSize(hourRingSize),
+                    bigFontSize: _getBottomBigWidgetTextSize(hourRingSize),
+                  ),
+                )),
           ],
         ));
+  }
+
+  List<IconifiedTextData> _getIconifiedTextData() {
+    List<IconifiedTextData> data = List();
+    data.add(IconifiedTextData(
+        _clockModel.temperatureString, MdiIcons.thermometer, false, 0.3));
+    data.add(
+        IconifiedTextData(_clockModel.location, MdiIcons.home, true, 0.4));
+    data.add(IconifiedTextData(_capitalize(_clockModel.weatherString),
+        _getWeatherIcon(_clockModel.weatherCondition), false, 0.3));
+
+    return data;
   }
 
   Widget _getTimeWidget(double hourRingSize) {
@@ -306,6 +286,17 @@ class _SmartClockState extends State<SmartClock> {
     return colors;
   }
 
+  List<Location> _getLocations() {
+    List<Location> locations = List();
+    locations.add(Location("New York", -5));
+    locations.add(Location("Berlin", 1));
+    locations.add(Location("Warsaw", 1));
+    locations.add(Location("Moscow", 3));
+    locations.add(Location("Tokyo", 8));
+
+    return locations;
+  }
+
   IconData _getWeatherIcon(WeatherCondition weatherCondition) {
     switch (weatherCondition) {
       case WeatherCondition.cloudy:
@@ -327,14 +318,5 @@ class _SmartClockState extends State<SmartClock> {
     return MdiIcons.weatherWindy;
   }
 
-  List<Location> _getLocations() {
-    List<Location> locations = List();
-    locations.add(Location("New York", -5));
-    locations.add(Location("Berlin", 1));
-    locations.add(Location("Warsaw", 1));
-    locations.add(Location("Moscow", 3));
-    locations.add(Location("Tokyo", 8));
-
-    return locations;
-  }
+  String _capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }
