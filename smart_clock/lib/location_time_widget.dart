@@ -14,11 +14,17 @@ class LocationTimeWidget extends StatelessWidget {
   final int timeOffset;
 
   /// Font size of time. This size will be used to determine size of other texts.
+  /// Default value is 20.
   final double timeFontSize;
 
   const LocationTimeWidget(
       {Key key, this.location, this.timeOffset, this.timeFontSize = 20})
-      : super(key: key);
+      : assert(location != null && location.length > 0,
+            "Location should not be empty or null"),
+        assert(timeOffset >= -12 && timeOffset <= 12,
+            "TimeOffset should be between -12 and 12"),
+        assert(timeFontSize > 0, "TimeFontSize should be positive value"),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

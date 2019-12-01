@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:smart_clock/location_time_widget.dart';
 import 'package:smart_clock/iconifed_text_widget.dart';
+import 'package:smart_clock/locations_times_row_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import 'location.dart';
 
 class SmartClock extends StatefulWidget {
   final ClockModel clockModel;
@@ -134,35 +137,12 @@ class _SmartClockState extends State<SmartClock> {
                 alignment: Alignment.topCenter,
                 child: Padding(
                     padding: EdgeInsets.only(top: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          LocationTimeWidget(
-                            location: "New York",
-                            timeOffset: -5,
-                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
-                          ),
-                          LocationTimeWidget(
-                            location: "Berlin",
-                            timeOffset: 1,
-                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
-                          ),
-                          LocationTimeWidget(
-                            location: "Warsaw",
-                            timeOffset: 1,
-                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
-                          ),
-                          LocationTimeWidget(
-                            location: "Moscow",
-                            timeOffset: 3,
-                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
-                          ),
-                          LocationTimeWidget(
-                            location: "Tokyo",
-                            timeOffset: 9,
-                            timeFontSize: _getCityClockMaxTextSize(hourRingSize),
-                          )
-                        ]))),
+                    child: LocationsTimesRowWidget(
+                      fontSize: _getCityClockMaxTextSize(
+                        hourRingSize,
+                      ),
+                      locations: _getLocations(),
+                    ))),
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -303,31 +283,26 @@ class _SmartClockState extends State<SmartClock> {
     List<Color> colors = List();
     int hour = _dateTime.hour;
 
-      //night
-      if (hour >= 22 || hour <= 5) {
-        colors.add(Color.fromARGB(255, 55, 59, 68));
-        colors.add(Color.fromARGB(255, 66, 134, 244));
-      }
-      //sunrise
-      if (hour >= 6 && hour <= 9) {
-        colors.add(Color.fromARGB(255, 253, 29, 29));
-        colors.add(Color.fromARGB(255, 252, 176, 69));
-      }
-      //day
-      if (hour >= 10 && hour <= 18) {
-        colors.add(Color.fromARGB(255, 58, 123, 213));
-        colors.add(Color.fromARGB(255, 58, 96, 115));
-      }
-      //sunset
-      if (hour >= 19 && hour <= 21) {
-        colors.add(Color.fromARGB(255, 11, 72, 107));
-        colors.add(Color.fromARGB(255, 245, 98, 23));
-
+    //night
+    if (hour >= 22 || hour <= 5) {
+      colors.add(Color.fromARGB(255, 55, 59, 68));
+      colors.add(Color.fromARGB(255, 66, 134, 244));
     }
-
-
-
-
+    //sunrise
+    if (hour >= 6 && hour <= 9) {
+      colors.add(Color.fromARGB(255, 253, 29, 29));
+      colors.add(Color.fromARGB(255, 252, 176, 69));
+    }
+    //day
+    if (hour >= 10 && hour <= 18) {
+      colors.add(Color.fromARGB(255, 58, 123, 213));
+      colors.add(Color.fromARGB(255, 58, 96, 115));
+    }
+    //sunset
+    if (hour >= 19 && hour <= 21) {
+      colors.add(Color.fromARGB(255, 11, 72, 107));
+      colors.add(Color.fromARGB(255, 245, 98, 23));
+    }
 
     return colors;
   }
@@ -351,5 +326,16 @@ class _SmartClockState extends State<SmartClock> {
     }
 
     return MdiIcons.weatherWindy;
+  }
+
+  List<Location> _getLocations() {
+    List<Location> locations = List();
+    locations.add(Location("New York", -5));
+    locations.add(Location("Berlin", 1));
+    locations.add(Location("Warsaw", 1));
+    locations.add(Location("Moscow", 3));
+    locations.add(Location("Tokyo", 8));
+
+    return locations;
   }
 }
