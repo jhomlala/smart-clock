@@ -44,7 +44,7 @@ class IconifiedTextsRowWidget extends StatelessWidget {
       }
 
       widgets.add(IconifiedTextWidget(
-        text: data.name,
+        text: data.text,
         iconData: data.iconData,
         fontSize: fontSize,
         iconSize: fontSize,

@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 
 ///Model class for additional clock data, i.e. home location, temperature, weather.
 class IconifiedTextData {
-  ///Name of the extra
-  final String name;
+  ///Text which will be displayed
+  final String text;
 
-  ///Icon of the extra
+  ///Icon which will be displayed next to text
   final IconData iconData;
 
   ///Is widget big. Big widget will have bigger font and bigger icon
@@ -15,9 +15,9 @@ class IconifiedTextData {
   ///Value should be between 0.0 and 1.0
   final double screenWidthFraction;
 
-  IconifiedTextData(this.name, this.iconData, this.isBig,
+  IconifiedTextData(this.text, this.iconData, this.isBig,
       this.screenWidthFraction)
-      : assert(name != null && name.length > 0, "Name can't be null or empty"),
+      : assert(text != null && text.length > 0, "Name can't be null or empty"),
         assert(iconData != null, "Icon data can't be null"),
         assert(screenWidthFraction >= 0 &&
             screenWidthFraction <= 1, "Screen width should be between 0 and 1");
