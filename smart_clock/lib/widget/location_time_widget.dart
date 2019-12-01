@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'date_time_utils.dart';
+import '../date_time_utils.dart';
+
+
 
 /// LocationTimeWidget is widget used to display current time/date in given
 /// location. It uses time offset to calculate time in given location.

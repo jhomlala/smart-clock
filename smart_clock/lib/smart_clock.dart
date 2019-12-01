@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
-import 'package:smart_clock/location_time_widget.dart';
 import 'package:smart_clock/iconifed_text_widget.dart';
-import 'package:smart_clock/locations_times_row_widget.dart';
+import 'package:smart_clock/widget/locations_times_row_widget.dart';
 import 'package:smart_clock/sun_path_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'location.dart';
+import 'model/location.dart';
 
 class SmartClock extends StatefulWidget {
   final ClockModel clockModel;

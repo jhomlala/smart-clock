@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'location.dart';
+import '../model/location.dart';
 import 'location_time_widget.dart';
+
 
 ///Widget used to display multiple LocationTimeWidgets. Widgets are displayed in
 ///a row.
