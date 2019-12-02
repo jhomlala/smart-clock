@@ -32,7 +32,7 @@ class _SmartClockState extends State<SmartClock> {
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(Duration(milliseconds: 10), _updateTime);
+    _timer = Timer.periodic(Duration(milliseconds: 100), _updateTime);
     _dateTime = DateTime.now();
     _clockModel.addListener(onModelChanged);
   }
@@ -97,7 +97,6 @@ class _SmartClockState extends State<SmartClock> {
               secondRingSize: secondRingSize,
               dateTime: _dateTime,
               is24hourFormat: _clockModel.is24HourFormat,
-              time: _time,
               timeFontSize: _getTimeFontSize(hourRingSize),
               dateFontSize: _getDateFontSize(hourRingSize),
             )),
@@ -136,43 +135,9 @@ class _SmartClockState extends State<SmartClock> {
     return data;
   }
 
-  Widget _getTimeWidget(double hourRingSize) {
-    var is24hourFormat = _clockModel.is24HourFormat;
-    var hour = _dateTime.hour;
-    var hourSufix = "AM";
-    if (!is24hourFormat) {
-      hourSufix = "PM";
-    }
-    List<Widget> widgets = List();
-    widgets.add(Text(_time,
-        style: TextStyle(
-            fontSize: _getTimeFontSize(hourRingSize),
-            color: Theme.of(context).textTheme.body1.color)));
-    if (!is24hourFormat) {
-      widgets.add(Text(hourSufix,
-          style: TextStyle(
-              fontSize: _getTimeFontSize(hourRingSize) / 2,
-              color: Theme.of(context).textTheme.body1.color)));
-    }
-    return Center(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, children: widgets));
-  }
+
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-
-  double _getHourProgress() {
-    return _dateTime.hour / 24 * 100;
-  }
-
-  double _getMinuteProgress() {
-    return _dateTime.minute / 60 * 100;
-  }
-
-  double _getSecondProgress() {
-    return _dateTime.second / 60 * 100;
-  }
-
   void _updateTime(Timer timer) {
     var is24hourFormat = _clockModel.is24HourFormat;
     var hour = _dateTime.hour;
@@ -209,9 +174,6 @@ class _SmartClockState extends State<SmartClock> {
     return "$value";
   }
 
-  String _formatDate() {
-    return "${_dateTime.year}/${_dateTime.month}/${_dateTime.day}";
-  }
 
   LinearGradient _getGradient() {
     return LinearGradient(
