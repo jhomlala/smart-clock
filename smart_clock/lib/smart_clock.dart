@@ -8,6 +8,7 @@ import 'package:smart_clock/widget/iconified_texts_row_widget.dart';
 import 'package:smart_clock/widget/locations_times_row_widget.dart';
 import 'package:smart_clock/widget/arc_progress_widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:smart_clock/widget/ring_clock.dart';
 
 import 'model/location.dart';
 
@@ -89,57 +90,17 @@ class _SmartClockState extends State<SmartClock> {
             gradient: _getGradient()),
         child: Stack(
           children: [
-            Padding(
-                padding: EdgeInsets.only(top: 0),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _getTimeWidget(hourRingSize),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              _formatDate(),
-                              style: TextStyle(
-                                  fontSize: _getDateFontSize(hourRingSize),
-                                  color:
-                                      Theme.of(context).textTheme.body1.color),
-                            )
-                          ])
-                    ])),
-            Center(
-                child: Container(
-                    width: hourRingSize,
-                    height: hourRingSize,
-                    child: ArcProgressWidget(
-                      progressValue: _getHourProgress(),
-                      boxWidth: hourRingSize / 2,
-                      brightness: Theme.of(context).brightness,
-                      strokeWidth: 10,
-                      animationTime: 500,
-                    ))),
-            Center(
-                child: Container(
-                    width: minuteRingSize,
-                    height: minuteRingSize,
-                    child: ArcProgressWidget(
-                      progressValue: _getMinuteProgress(),
-                      boxWidth: minuteRingSize / 2,
-                      brightness: Theme.of(context).brightness,
-                      strokeWidth: 10,
-                      animationTime: 500,
-                    ))),
-            Center(
-                child: Container(
-                    width: secondRingSize,
-                    height: secondRingSize,
-                    child: ArcProgressWidget(
-                      progressValue: _getSecondProgress(),
-                      boxWidth: secondRingSize / 2,
-                      brightness: Theme.of(context).brightness,
-                      strokeWidth: 10,
-                      animationTime: 500,
-                    ))),
+          Align(
+          alignment: Alignment.center, child: RingClock(
+              hourRingSize: hourRingSize,
+              minuteRingSize: minuteRingSize,
+              secondRingSize: secondRingSize,
+              dateTime: _dateTime,
+              is24hourFormat: _clockModel.is24HourFormat,
+              time: _time,
+              timeFontSize: _getTimeFontSize(hourRingSize),
+              dateFontSize: _getDateFontSize(hourRingSize),
+            )),
             Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
@@ -168,8 +129,7 @@ class _SmartClockState extends State<SmartClock> {
     List<IconifiedTextData> data = List();
     data.add(IconifiedTextData(
         _clockModel.temperatureString, MdiIcons.thermometer, false, 0.3));
-    data.add(
-        IconifiedTextData(_clockModel.location, MdiIcons.home, true, 0.4));
+    data.add(IconifiedTextData(_clockModel.location, MdiIcons.home, true, 0.4));
     data.add(IconifiedTextData(_capitalize(_clockModel.weatherString),
         _getWeatherIcon(_clockModel.weatherCondition), false, 0.3));
 

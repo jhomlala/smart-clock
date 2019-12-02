@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-///Base class for all widgets which has animations. It provides useful interface
-///to create animation based on fraction value.
+///Base class for all stateful widgets which has animations. It provides useful
+///interface to create animation between two values in given time and curve. It
+///may be overkill for this project, but if we count this as educational then
+///it's pretty nice to use it here and next future projects :). Can be easily
+///incorporated with RxDart.
 abstract class AnimatedState<T extends StatefulWidget> extends State<T>
     with TickerProviderStateMixin {
   AnimationController _controller;
@@ -11,7 +14,6 @@ abstract class AnimatedState<T extends StatefulWidget> extends State<T>
 
   /// On animation status changed i.e completed
   void onAnimationStatusChanged(AnimationStatus status);
-
 
   ///Start animation between start and end value in given duration and curve.
   startAnimation(
@@ -43,10 +45,8 @@ abstract class AnimatedState<T extends StatefulWidget> extends State<T>
     return CurvedAnimation(parent: controller, curve: curve);
   }
 
-
   ///Create tween between start and end with given animation
-  Animation<double> _getTween(
-      double start, double end, Animation animation) {
+  Animation<double> _getTween(double start, double end, Animation animation) {
     return Tween(begin: start, end: end).animate(animation);
   }
 
