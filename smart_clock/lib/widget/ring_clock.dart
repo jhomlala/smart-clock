@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../date_time_utils.dart';
+import '../utils/date_time_utils.dart';
 import 'arc_progress_widget.dart';
-
 
 ///Widget to display digital clock, that shows time and date. It shows ring
 ///for hours, minutes and seconds. Full ring is equal to complete day/hour/minute.
 class RingClock extends StatelessWidget {
-
   ///Size of hour ring. It's the smallest ring
   final double hourRingSize;
 
@@ -98,7 +96,6 @@ class RingClock extends StatelessWidget {
   }
 
   Widget _getTimeWidget(BuildContext context) {
-    var hour = dateTime.hour;
     var hourSuffix = "AM";
     if (!is24hourFormat) {
       hourSuffix = "PM";
@@ -136,14 +133,12 @@ class RingClock extends StatelessWidget {
     return dateTime.second / 60 * 100;
   }
 
-  String _formatTime(){
+  String _formatTime() {
     var hour = dateTime.hour;
-    var hourSufix = "AM";
     if (!is24hourFormat) {
       if (hour > 12) {
         hour = hour - 12;
       }
-      hourSufix = "PM";
     }
     return DateTimeUtils.formatDateTimeUnit(hour, 2) +
         ":" +
