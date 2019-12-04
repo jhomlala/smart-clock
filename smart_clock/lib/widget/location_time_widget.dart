@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smart_clock/widget/time_text.dart';
 
 import '../utils/date_time_utils.dart';
-
-
 
 /// LocationTimeWidget is widget used to display current time/date in given
 /// location. It uses time offset to calculate time in given location.
@@ -19,12 +18,18 @@ class LocationTimeWidget extends StatelessWidget {
   /// Default value is 20.
   final double timeFontSize;
 
-  const LocationTimeWidget(
-      {Key key, this.location, this.timeOffset, this.timeFontSize = 20})
+  final bool is24hourFormat;
+
+
+  const LocationTimeWidget({Key key,
+    this.location,
+    this.timeOffset,
+    this.timeFontSize = 20,
+    this.is24hourFormat})
       : assert(location != null && location.length > 0,
-            "Location should not be empty or null"),
+  "Location should not be empty or null"),
         assert(timeOffset >= -12 && timeOffset <= 12,
-            "TimeOffset should be between -12 and 12"),
+        "TimeOffset should be between -12 and 12"),
         assert(timeFontSize > 0, "TimeFontSize should be positive value"),
         super(key: key);
 
@@ -38,7 +43,11 @@ class LocationTimeWidget extends StatelessWidget {
         location,
         style: _getTextStyle(otherTextsFontSize),
       ),
-      Text(_formatTime(locationDateTime), style: _getTextStyle(timeFontSize)),
+
+      TimeText(dateTime: locationDateTime,
+        timeFontSize: timeFontSize,
+        is24hourFormat: is24hourFormat,
+      padding: 5,),
       Text(DateTimeUtils.formatDate(locationDateTime),
           style: _getTextStyle(otherTextsFontSize))
     ]);
@@ -59,12 +68,4 @@ class LocationTimeWidget extends StatelessWidget {
     return cityDateTime;
   }
 
-  /// Format time for given date time.
-  String _formatTime(DateTime dateTime) {
-    return DateTimeUtils.formatDateTimeUnit(dateTime.hour, 2) +
-        ":" +
-        DateTimeUtils.formatDateTimeUnit(dateTime.minute, 2) +
-        ":" +
-        DateTimeUtils.formatDateTimeUnit(dateTime.second, 2);
-  }
 }

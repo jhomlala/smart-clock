@@ -39,7 +39,7 @@ class ClockCustomizer extends StatefulWidget {
 
 class _ClockCustomizerState extends State<ClockCustomizer> {
   final _model = ClockModel();
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.dark;
   bool _configButtonShown = false;
 
   @override
@@ -163,7 +163,6 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
       builder: (BuildContext context) {
         double width = MediaQuery.of(context).size.width;
         double iconSize = width * 0.05;
-        print("Width: " + width.toString());
         return Padding(
             padding: EdgeInsets.only(right:iconSize/2,top:iconSize/2),
             child:IconButton(

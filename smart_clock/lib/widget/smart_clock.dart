@@ -109,6 +109,8 @@ class _SmartClockState extends State<SmartClock> {
                   is24hourFormat: _clockModel.is24HourFormat,
                   timeFontSize: _timeFontSize,
                   dateFontSize: _dateFontSize,
+                  ringStrokeWidth: 10,
+                  animationTime: 500,
                 )),
             Align(
                 alignment: Alignment.topCenter,
@@ -117,6 +119,7 @@ class _SmartClockState extends State<SmartClock> {
                     child: LocationsTimesRowWidget(
                       fontSize: _locationTimeFontSize,
                       locations: _getLocations(),
+                      is24hourFormat: _clockModel.is24HourFormat,
                     ))),
             Align(
                 alignment: Alignment.bottomCenter,

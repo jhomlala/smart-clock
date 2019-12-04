@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_clock/widget/time_text.dart';
 
 import '../utils/date_time_utils.dart';
 import 'arc_progress_widget.dart';
@@ -6,6 +7,9 @@ import 'arc_progress_widget.dart';
 ///Widget to display digital clock, that shows time and date. It shows ring
 ///for hours, minutes and seconds. Full ring is equal to complete day/hour/minute.
 class RingClock extends StatelessWidget {
+  static const timeAm = "AM";
+  static const timePm = "PM";
+
   ///Size of hour ring. It's the smallest ring
   final double hourRingSize;
 
@@ -27,6 +31,12 @@ class RingClock extends StatelessWidget {
   ///Date text font size
   final double dateFontSize;
 
+  ///Ring stroke width
+  final double ringStrokeWidth;
+
+  ///Ring animation time in milliseconds
+  final int animationTime;
+
   const RingClock(
       {Key key,
       this.hourRingSize,
@@ -35,7 +45,9 @@ class RingClock extends StatelessWidget {
       this.dateTime,
       this.is24hourFormat,
       this.timeFontSize,
-      this.dateFontSize})
+      this.dateFontSize,
+      this.ringStrokeWidth,
+      this.animationTime})
       : super(key: key);
 
   @override
@@ -49,10 +61,13 @@ class RingClock extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _getTimeWidget(context),
+                    TimeText(
+                        dateTime: dateTime,
+                        is24hourFormat: is24hourFormat,
+                        timeFontSize: timeFontSize),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Text(
-                        _formatDate(),
+                        DateTimeUtils.formatDate(dateTime),
                         style: TextStyle(
                             fontSize: dateFontSize,
                             color: Theme.of(context).textTheme.body1.color),
@@ -67,8 +82,8 @@ class RingClock extends StatelessWidget {
                     progressValue: _getHourProgress(),
                     boxWidth: hourRingSize / 2,
                     brightness: Theme.of(context).brightness,
-                    strokeWidth: 10,
-                    animationTime: 500,
+                    strokeWidth: ringStrokeWidth,
+                    animationTime: animationTime,
                   ))),
           Center(
               child: Container(
@@ -78,8 +93,8 @@ class RingClock extends StatelessWidget {
                     progressValue: _getMinuteProgress(),
                     boxWidth: minuteRingSize / 2,
                     brightness: Theme.of(context).brightness,
-                    strokeWidth: 10,
-                    animationTime: 500,
+                    strokeWidth: ringStrokeWidth,
+                    animationTime: animationTime,
                   ))),
           Center(
               child: Container(
@@ -89,36 +104,10 @@ class RingClock extends StatelessWidget {
                     progressValue: _getSecondProgress(),
                     boxWidth: secondRingSize / 2,
                     brightness: Theme.of(context).brightness,
-                    strokeWidth: 10,
-                    animationTime: 500,
+                    strokeWidth: ringStrokeWidth,
+                    animationTime: animationTime,
                   )))
         ]));
-  }
-
-  Widget _getTimeWidget(BuildContext context) {
-    var hourSuffix = "AM";
-    if (!is24hourFormat) {
-      hourSuffix = "PM";
-    }
-    String time = _formatTime();
-    List<Widget> widgets = List();
-    widgets.add(Text(time,
-        style: TextStyle(
-            fontSize: timeFontSize,
-            color: Theme.of(context).textTheme.body1.color)));
-    if (!is24hourFormat) {
-      widgets.add(Text(hourSuffix,
-          style: TextStyle(
-              fontSize: timeFontSize / 2,
-              color: Theme.of(context).textTheme.body1.color)));
-    }
-    return Center(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, children: widgets));
-  }
-
-  String _formatDate() {
-    return "${dateTime.year}/${dateTime.month}/${dateTime.day}";
   }
 
   double _getHourProgress() {
@@ -131,19 +120,5 @@ class RingClock extends StatelessWidget {
 
   double _getSecondProgress() {
     return dateTime.second / 60 * 100;
-  }
-
-  String _formatTime() {
-    var hour = dateTime.hour;
-    if (!is24hourFormat) {
-      if (hour > 12) {
-        hour = hour - 12;
-      }
-    }
-    return DateTimeUtils.formatDateTimeUnit(hour, 2) +
-        ":" +
-        DateTimeUtils.formatDateTimeUnit(dateTime.minute, 2) +
-        ":" +
-        DateTimeUtils.formatDateTimeUnit(dateTime.second, 2);
   }
 }
