@@ -15,10 +15,13 @@ class IconifiedTextData {
   ///Value should be between 0.0 and 1.0
   final double screenWidthFraction;
 
-  IconifiedTextData(this.text, this.iconData, this.isBig,
-      this.screenWidthFraction)
+  IconifiedTextData(
+      this.text, this.iconData, this.isBig, this.screenWidthFraction)
       : assert(text != null && text.length > 0, "Name can't be null or empty"),
         assert(iconData != null, "Icon data can't be null"),
-        assert(screenWidthFraction >= 0 &&
-            screenWidthFraction <= 1, "Screen width should be between 0 and 1");
+        assert(
+            screenWidthFraction != null &&
+                screenWidthFraction >= 0 &&
+                screenWidthFraction <= 1,
+            "Screen width must be not null and must be between 0 and 1");
 }

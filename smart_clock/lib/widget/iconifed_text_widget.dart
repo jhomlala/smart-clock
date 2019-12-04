@@ -27,9 +27,12 @@ class IconifiedTextWidget extends StatelessWidget {
       this.width})
       : assert(text != null && text.length > 0, "Text can't be null or empty"),
         assert(iconData != null, "Icon data can't be null"),
-        assert(fontSize > 0, "Font size must be positive value"),
-        assert(iconSize > 0, "Icon size must be positive value"),
-        assert(width > 0, "Width must be positive value"),
+        assert(fontSize != null && fontSize > 0,
+            "Font size must be not null and greater than 0"),
+        assert(iconSize != null && iconSize > 0,
+            "Icon size must be not null and greater than 0"),
+        assert(width != null && width > 0,
+            "Width must be not null and greater than 0"),
         super(key: key);
 
   @override

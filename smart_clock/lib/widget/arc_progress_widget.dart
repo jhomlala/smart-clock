@@ -30,11 +30,11 @@ class ArcProgressWidget extends StatefulWidget {
       this.brightness,
       this.animationTime,
       this.strokeWidth})
-      : assert(progressValue >= 0 && progressValue <= 100,
-            "Progress value must be between 0 and 100"),
-        assert(boxWidth > 0, "Box width must be greater than 0"),
-        assert(animationTime > 0, "Animation time must be greater than 0"),
-        assert(strokeWidth > 0, "Stroke width must be greater than 0"),
+      : assert(progressValue != null && progressValue >= 0 && progressValue <= 100,
+            "Progress value must be not null and must be between 0 and 100"),
+        assert(boxWidth != null && boxWidth > 0, "Box width must be not null and greater than 0"),
+        assert(animationTime != null && animationTime > 0, "Animation time must be not null and greater than 0"),
+        assert(strokeWidth != null && strokeWidth > 0, "Stroke width must be not null and greater than 0"),
         super(key: key);
 
   @override

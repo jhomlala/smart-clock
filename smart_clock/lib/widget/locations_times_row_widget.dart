@@ -17,7 +17,8 @@ class LocationsTimesRowWidget extends StatelessWidget {
 
   const LocationsTimesRowWidget(
       {Key key, this.fontSize, this.locations, this.is24hourFormat})
-      : assert(fontSize > 0, "Font size must be positive"),
+      : assert(fontSize != null && fontSize > 0,
+            "Font size must be not null and greater than 0"),
         assert(
             locations != null && locations.length > 0 && locations.length <= 5,
             "Locations must be filled. Locations must have max 5 elements."),

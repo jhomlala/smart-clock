@@ -26,7 +26,8 @@ class TimeText extends StatelessWidget {
       this.padding = 0})
       : assert(is24hourFormat != null, "Flag can't be null"),
         assert(dateTime != null, "Date time can't be null"),
-        assert(timeFontSize > 0, " Time font size must be greater than 0"),
+        assert(timeFontSize != null && timeFontSize > 0,
+            " Time font size must be not null and greater than 0"),
         super(key: key);
 
   @override

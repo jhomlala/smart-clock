@@ -20,17 +20,18 @@ class LocationTimeWidget extends StatelessWidget {
 
   final bool is24hourFormat;
 
-
-  const LocationTimeWidget({Key key,
-    this.location,
-    this.timeOffset,
-    this.timeFontSize = 20,
-    this.is24hourFormat})
+  const LocationTimeWidget(
+      {Key key,
+      this.location,
+      this.timeOffset,
+      this.timeFontSize = 20,
+      this.is24hourFormat})
       : assert(location != null && location.length > 0,
-  "Location should not be empty or null"),
+            "Location should not be empty or null"),
         assert(timeOffset >= -12 && timeOffset <= 12,
-        "TimeOffset should be between -12 and 12"),
-        assert(timeFontSize > 0, "TimeFontSize should be positive value"),
+            "TimeOffset should be between -12 and 12"),
+        assert(timeFontSize != null && timeFontSize > 0,
+            "TimeFontSize must be not null and greater than 0"),
         super(key: key);
 
   @override
@@ -43,11 +44,12 @@ class LocationTimeWidget extends StatelessWidget {
         location,
         style: _getTextStyle(otherTextsFontSize),
       ),
-
-      TimeText(dateTime: locationDateTime,
+      TimeText(
+        dateTime: locationDateTime,
         timeFontSize: timeFontSize,
         is24hourFormat: is24hourFormat,
-      padding: 5,),
+        padding: 5,
+      ),
       Text(DateTimeUtils.formatDate(locationDateTime),
           style: _getTextStyle(otherTextsFontSize))
     ]);
@@ -67,5 +69,4 @@ class LocationTimeWidget extends StatelessWidget {
     DateTime cityDateTime = currentDateTime.add(Duration(hours: timeOffset));
     return cityDateTime;
   }
-
 }

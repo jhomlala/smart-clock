@@ -21,6 +21,14 @@ abstract class AnimatedState<T extends StatefulWidget> extends State<T>
       double end = 1.0,
       int duration: 1000,
       Curve curve = Curves.linear}) {
+    assert(start != null && start >= 0,
+        "Start must be not null and must be greater or equals 0.0");
+    assert(end != null && end >= 0,
+        "End must be not null and must be greater or equals 0.0");
+    assert(start < end, "End must be greater than start");
+    assert(duration != null && duration > 0,
+        "Duration must be not null and must be greater than 0");
+    assert(curve != null, "Curve must be not null");
     _controller = _getAnimationController(this, duration);
     Animation animation = _getCurvedAnimation(_controller, curve);
 

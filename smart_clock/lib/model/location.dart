@@ -8,6 +8,6 @@ class Location {
 
   Location(this.name, this.timeOffset)
       : assert(name != null && name.length > 0, "Name can't be null"),
-        assert(timeOffset >= -12 && timeOffset <= 12,
-            "Time offset must be between -12 and 12");
+        assert(timeOffset != null && timeOffset >= -12 && timeOffset <= 12,
+            "Time offset must be not null and must be between -12 and 12");
 }

@@ -48,7 +48,26 @@ class RingClock extends StatelessWidget {
       this.dateFontSize,
       this.ringStrokeWidth,
       this.animationTime})
-      : super(key: key);
+      : assert(hourRingSize != null && hourRingSize > 0,
+            "Hour ring size must be not null and greater than 0"),
+        assert(minuteRingSize != null && minuteRingSize > 0,
+            "Minute ring size must be not null and greater than 0"),
+        assert(secondRingSize != null && secondRingSize > 0,
+            "Second ring size must be not null and greater than 0"),
+        assert(dateTime != null, "Date time can't be null"),
+        assert(
+          is24hourFormat != null,
+          "Flag can't be null",
+        ),
+        assert(timeFontSize != null && timeFontSize > 0,
+            "Time font size must be not null and greater than 0"),
+        assert(dateFontSize != null && dateFontSize > 0,
+            "Date font size must be not null and greater than 0"),
+        assert(ringStrokeWidth != null && ringStrokeWidth > 0,
+            "Ring stroke width must be not null and greater than 0"),
+        assert(animationTime != null && animationTime > 0,
+            "Animation time must be not null and greater than 0"),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +129,18 @@ class RingClock extends StatelessWidget {
         ]));
   }
 
+  ///Get current hour progress for ring. It returns percent from 0 to 100 which
+  ///shows state of current day.
   double _getHourProgress() {
     return dateTime.hour / 24 * 100;
   }
 
+  ///Get current minute progress. It shows hour progress from 0 to 100 percent.
   double _getMinuteProgress() {
     return dateTime.minute / 60 * 100;
   }
 
+  ///Get current second progress. It shows minute progress from 0 to 100 percent.
   double _getSecondProgress() {
     return dateTime.second / 60 * 100;
   }

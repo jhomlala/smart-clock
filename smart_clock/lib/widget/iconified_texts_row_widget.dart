@@ -21,8 +21,10 @@ class IconifiedTextsRowWidget extends StatelessWidget {
                 iconifiedTextData.length != 0 &&
                 iconifiedTextData.length <= 3,
             "Iconified data can't be null and size must be between 1 and 3"),
-        assert(smallFontSize > 0, "Small font size should have positive value"),
-        assert(bigFontSize > 0, "Big font size should have positive value"),
+        assert(smallFontSize != null && smallFontSize > 0,
+            "Small font size must be not null and greater than 0"),
+        assert(bigFontSize != null && bigFontSize > 0,
+            "Big font size must be not null and greater than 0"),
         super(key: key);
 
   @override
